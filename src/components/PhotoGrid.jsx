@@ -11,11 +11,21 @@ const PhotoGrid = ({
     <div className="photo-grid">
       {photos.map((photo) => (
         <div key={photo.id} className="photo-card">
-          <img
-            src={photo.url}
-            alt={photo.name}
-            onClick={() => onSelect(photo)}
-          />
+
+          {photo.type === "video" ? (
+            <video
+              src={photo.url}
+              controls
+              onClick={() => onSelect(photo)}
+              style={{ width: "100%", borderRadius: "14px" }}
+            />
+          ) : (
+            <img
+              src={photo.url}
+              alt={photo.name}
+              onClick={() => onSelect(photo)}
+            />
+          )}
 
           <div className="photo-actions">
             {activeTab !== "Trash" && (
@@ -23,7 +33,10 @@ const PhotoGrid = ({
                 <button onClick={() => onFavorite(photo)}>
                   {favorites.some((f) => f.id === photo.id) ? "💜" : "🤍"}
                 </button>
-                <button onClick={() => onTrash(photo)}>🗑</button>
+
+                <button onClick={() => onTrash(photo)}>
+                  🗑
+                </button>
               </>
             )}
 
@@ -33,6 +46,7 @@ const PhotoGrid = ({
               </button>
             )}
           </div>
+
         </div>
       ))}
     </div>

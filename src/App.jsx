@@ -17,12 +17,14 @@ function App() {
   const [dateFilter, setDateFilter] = useState("");
   const [scanning, setScanning] = useState(false);
 
+  // UPDATED: supports images + videos
   const handleUpload = (files) => {
     const newPhotos = Array.from(files).map((file) => ({
       id: file.name + file.size,
       url: URL.createObjectURL(file),
       name: file.name,
       date: new Date().toISOString(),
+      type: file.type.startsWith("video") ? "video" : "image",
     }));
 
     setPhotos((prev) => {
@@ -53,9 +55,7 @@ function App() {
     setAlbums((prevAlbums) => {
       const updated = { ...prevAlbums };
       Object.keys(updated).forEach((key) => {
-        updated[key] = updated[key].filter(
-          (p) => p.id !== photo.id
-        );
+        updated[key] = updated[key].filter((p) => p.id !== photo.id);
       });
       return updated;
     });
@@ -111,7 +111,6 @@ function App() {
       setActiveTab(Object.keys(albumObj)[0]);
 
       alert("✅ Face scanning completed successfully!");
-
     } catch (error) {
       console.error("Face scan error:", error);
       alert("Face scanning failed.");

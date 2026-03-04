@@ -20,6 +20,10 @@ export const clusterFaces = async (photos) => {
   const threshold = 0.6; // similarity threshold
 
   for (const photo of photos) {
+
+    // SKIP VIDEOS
+    if (photo.type === "video") continue;
+
     try {
       const img = new Image();
       img.crossOrigin = "anonymous"; // IMPORTANT for CDN
