@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import PhotoGrid from "./components/PhotoGrid";
 import PhotoModal from "./components/PhotoModal";
+import CameraModal from "./components/CameraModal";
 import { loadModels, clusterFaces } from "./utils/faceDetection";
 import "./App.css";
 
@@ -16,8 +17,9 @@ function App() {
   const [search, setSearch] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [scanning, setScanning] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
-  // UPDATED: supports images + videos
+  // Upload photos or videos
   const handleUpload = (files) => {
     const newPhotos = Array.from(files).map((file) => ({
       id: file.name + file.size,
@@ -33,6 +35,19 @@ function App() {
       );
       return [...filtered, ...prev];
     });
+  };
+
+  // Capture photo from camera
+  const capturePhoto = (imageUrl) => {
+    const newPhoto = {
+      id: Date.now(),
+      url: imageUrl,
+      name: "Camera Photo",
+      date: new Date().toISOString(),
+      type: "image",
+    };
+
+    setPhotos((prev) => [newPhoto, ...prev]);
   };
 
   const toggleFavorite = (photo) => {
@@ -171,6 +186,7 @@ function App() {
         setSelectedDate={setDateFilter}
         scanFaces={handleScanFaces}
         scanning={scanning}
+        openCamera={() => setShowCamera(true)}
       />
 
       <div className="main-layout">
@@ -215,6 +231,13 @@ function App() {
         <PhotoModal
           photo={selectedPhoto}
           onClose={() => setSelectedPhoto(null)}
+        />
+      )}
+
+      {showCamera && (
+        <CameraModal
+          onClose={() => setShowCamera(false)}
+          onCapture={capturePhoto}
         />
       )}
 

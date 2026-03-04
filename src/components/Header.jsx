@@ -6,6 +6,7 @@ const Header = ({
   setSelectedDate,
   scanFaces,
   scanning,
+  openCamera
 }) => {
   const fileRef = useRef();
 
@@ -27,25 +28,30 @@ const Header = ({
       </div>
 
       <div className="actions-section">
+
         <button onClick={() => fileRef.current.click()}>
           Upload
+        </button>
+
+        <button onClick={openCamera}>
+          📷 Camera
         </button>
 
         <button onClick={scanFaces} disabled={scanning}>
           {scanning ? "Scanning..." : "Scan Faces"}
         </button>
+
       </div>
 
-      {/* UPDATED FILE INPUT */}
       <input
         type="file"
         accept="image/*,video/*"
-        capture="environment"
         multiple
         hidden
         ref={fileRef}
         onChange={(e) => onUpload(e.target.files)}
       />
+
     </div>
   );
 };
